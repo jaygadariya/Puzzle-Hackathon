@@ -76,11 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
           const SizedBox(
             height: 40.0,
           ),
-          Text(
-            "Steps : $steps",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30.0,
+          Obx(
+            () => Text(
+              "Steps : $steps",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0,
+              ),
             ),
           ),
           const SizedBox(
