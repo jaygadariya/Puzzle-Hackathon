@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:puzzle_hack/level_Selection.dart';
 
 class MyHomePage extends StatefulWidget {
   final int count;
@@ -60,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             GestureDetector(
               onTap: () {
-                list.shuffle();
+                dialog(context: context, isReload: true);
               },
               child: Icon(
                 Icons.refresh,
@@ -129,29 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               }
 
                               if (mainList.toString() == list.toString()) {
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: false, // user must tap button!
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Game over'),
-                                        content: const Text('congratulations you won'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: const Text('OK'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: const Text('Cancel'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    });
+                                dialog(context: context, isReload: false);
                               }
                             },
                             child: Container(
@@ -180,5 +159,37 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+  dialog({required context, required bool isReload}) {
+    showDialog(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(isReload == true ? 'Reload' : 'Game over'),
+            content: Text(isReload == true ? 'are you sure to reload game?' : 'congratulations you won'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  if (isReload == true) {
+                    steps.value = 0;
+                    list.shuffle();
+                    Get.back();
+                  } else {
+                    Get.offAll(LevelSelection());
+                  }
+                },
+              ),
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Get.back();
+                },
+              ),
+            ],
+          );
+        });
   }
 }
